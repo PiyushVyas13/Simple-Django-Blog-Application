@@ -1,0 +1,35 @@
+{% load static %}
+<html>
+  <head>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+  <body>
+    <div class="login">
+      <div class="avatar">
+        <img src="{{ request.user.profile.profile_picure.url }}" alt="avatar" />
+      </div>
+      <h2>Login</h2>
+      {% if request.user.is_authenticated %}
+        <h3>Welcome Back, {{ request.user.username }}</h3>
+      {% else %}
+        <h3>Login Now</h3>
+      {% endif %}
+      
+      <form class="login-form" action="{% url 'authapp:index' %}" method="post">
+        {% csrf_token %}
+        <div class="textbox">
+          <input type="text" placeholder="Username" name="username"/>
+          <span class="material-symbols-outlined"> account_circle </span>
+        </div>
+        <div class="textbox">
+          <input type="password" placeholder="Password" name="password"/>
+          <span class="material-symbols-outlined"> lock </span>
+        </div>
+        <button type="submit">LOGIN</button>
+        <a href="#">Forgot your credentials?</a>
+        <span>New Here? <a href="{% url 'authapp:register' %}">Create an Account</a></span>
+      </form>
+    </div>
+  </body>
+</html>

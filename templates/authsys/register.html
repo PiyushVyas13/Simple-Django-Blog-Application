@@ -1,0 +1,15 @@
+{% extends '../blog/index.html' %}
+{% load crispy_forms_tags %}
+
+    {% block content %}
+    <h2>Register</h2>
+    <hr>
+    <form action="{% url 'authapp:register' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Register">
+    </form>
+
+    {% endblock content %}
+    
+    
