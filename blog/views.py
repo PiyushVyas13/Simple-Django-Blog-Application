@@ -56,7 +56,8 @@ def detail(request, post_id):
     post = Post.objects.get(pk=post_id)
     user_has_commented = Comment.objects.filter(user=request.user, post=post).exists() if request.user.is_authenticated else True 
     user_has_liked = post.liked_by.filter(id=request.user.id).exists() if request.user.is_authenticated else True
-    return render(request, "blog/detail.html", {"post":post, "user_has_commented":user_has_commented, "user_has_liked":user_has_liked})
+    user_has_disliked = post.disliked_by.filter(id=request.user.id).exists() if request.user.is_authenticated else True
+    return render(request, "blog/detail.html", {"post":post, "user_has_commented":user_has_commented, "user_has_liked":user_has_liked, "user_has_disliked":user_has_disliked})
 
 @login_required(login_url="authapp:index")
 def add_comment(request, post_id):
@@ -72,6 +73,15 @@ def like_post(request, post_id):
         return HttpResponse("What the hell?")
     else:
         post.liked_by.add(request.user)
+        return redirect("blog:detail", post_id)
+
+@login_required(login_url="authapp:index")
+def dislike_post(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    if(post.disliked_by.filter(id=request.user.id).exists()):
+        return HttpResponse("Why the hell?")
+    else:
+        post.disliked_by.add(request.user)
         return redirect("blog:detail", post_id)
 
 class LatestPostsFeed(Feed):

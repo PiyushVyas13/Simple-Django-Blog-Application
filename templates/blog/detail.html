@@ -3,8 +3,12 @@
 {% block content %}
     <h2>{{ post.title }} </h2>
     <span>{{ post.liked_by.all.count }} likes </span> &nbsp;
+    <span>{{ post.disliked_by.all.count }} dislikes </span>
     {% if request.user.is_authenticated and not user_has_liked %}
-        <a href="{% url 'blog:like' post.id %}"> Like this post </a>
+        <a href="{% url 'blog:like' post.id %}"> Like this post </a> &nbsp;
+    {% endif %}
+    {% if request.user.is_authenticated and not user_has_disliked %}
+        <a href="{% url 'blog:dislike' post.id %}"> Dislike this post </a> &nbsp;
     {% endif %}
     <hr>
     <p>{{ post.content }} </p>

@@ -1,3 +1,7 @@
 /db.sqlite3
 /images
 /manage.py
+blog/__pycache__/
+authsys/__pycache__/
+blog/migrations/
+authsys/migrations/
