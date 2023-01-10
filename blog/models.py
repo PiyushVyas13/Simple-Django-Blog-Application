@@ -6,6 +6,7 @@ class Post(models.Model):
     content = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     liked_by = models.ManyToManyField(User, related_name="liked_posts", blank=True)
+    disliked_by = models.ManyToManyField(User, related_name="disliked_posts", blank=True)
     # temp = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(blank=True)
     # comments = 
