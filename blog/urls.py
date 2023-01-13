@@ -12,6 +12,7 @@ urlpatterns = [
     path('comment/<int:post_id>', views.add_comment, name="comment"),
     path('like/<int:post_id>', views.like_post, name="like"),
     path('rss/feed', views.LatestPostsFeed(), name="latest_rss"),
-    path('dislike/<int:post_id>', views.dislike_post, name="dislike")
+    path('dislike/<int:post_id>', views.dislike_post, name="dislike"),
+    path('<int:user_id>/profile', views.user_profile, name="profile"),
 
 ]

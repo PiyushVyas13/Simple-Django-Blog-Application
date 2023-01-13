@@ -25,6 +25,7 @@
         {% if request.user.is_authenticated %}
         <span>{{ request.user.username }}</span>
         <span><a href="{% url 'authapp:logout' %}">Logout</a></span><br>
+        <span><a href="{% url 'blog:profile' request.user.id %}"> Profile </a> </span>
         {% else %}
         <span><a href="{% url 'authapp:register' %}">Register</a></span>
         <span><a href="{% url 'authapp:index' %}">Login</a></span> <br>

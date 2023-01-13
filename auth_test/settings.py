@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "authsys.apps.AuthsysConfig",
     "crispy_forms",
     "blog.apps.BlogConfig",
-    'betterforms'
+    'betterforms',
+    'imagekit'
 ]
 
 MIDDLEWARE = [

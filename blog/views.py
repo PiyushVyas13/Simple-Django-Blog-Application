@@ -84,6 +84,12 @@ def dislike_post(request, post_id):
         post.disliked_by.add(request.user)
         return redirect("blog:detail", post_id)
 
+@login_required(login_url="authapp:index")
+def user_profile(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    return render(request, "blog/profile.html",{'user':user})
+
 class LatestPostsFeed(Feed):
     title = 'Latest Blog Posts'
     link = '/blog/'
