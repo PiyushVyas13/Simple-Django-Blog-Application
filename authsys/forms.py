@@ -7,12 +7,12 @@ from .models import Profile
 class UserForm(UserCreationForm):
     class Meta:
         model = User 
-        fields = ["first_name", "last_name", "username", "email","password1", "password2"]
+        fields = ["username", "password1", "password2"]
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile 
-        fields = ['profile_picture']
+        fields = ['profile_thumbnail', 'bio']
 
 class CombinedForm(MultiModelForm):
     form_classes = {

@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     "crispy_forms",
     "blog.apps.BlogConfig",
     'betterforms',
-    'imagekit'
+    "imagekit",
+    "easy_thumbnails",
+    "rest_framework",
+    "api.apps.ApiConfig",
 ]
 
 MIDDLEWARE = [
@@ -85,6 +88,13 @@ DATABASES = {
     }
 }
 
+
+THUMBNAIL_ALIASES = {
+     '': {
+        'avatar': {'size': (50, 50), 'crop': True},
+        'medium': {'size': (300, 300), 'crop': False},
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

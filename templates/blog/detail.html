@@ -12,7 +12,12 @@
     {% endif %}
     <hr>
     <p>{{ post.content }} </p>
-    
+    <h3>Tags</h3>
+    <ul>
+        {% for tag in post.tags.all %}
+            <li>{{ tag.name }} </li>
+        {% endfor %}
+    </ul>
     {% if post.image.url != None %}
     <img src="{{ post.image.url }}" >
     {% endif %}

@@ -14,5 +14,5 @@ urlpatterns = [
     path('rss/feed', views.LatestPostsFeed(), name="latest_rss"),
     path('dislike/<int:post_id>', views.dislike_post, name="dislike"),
     path('<int:user_id>/profile', views.user_profile, name="profile"),
-
+    
 ]

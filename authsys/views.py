@@ -11,7 +11,7 @@ def index(request):
         password = request.POST['password']
 
         user = authenticate(username=username, password=password)
-        print(user.profile.profile_picture.url)
+       
         if user is not None:
             login(request, user)
             return redirect("blog:index")
@@ -26,7 +26,7 @@ def register_user(request):
         if form.is_valid():
             data = form.cleaned_data
             user:User = form.save(commit=False)
-            user.profile.profile_picture = request.FILES['profile-pic']
+            user.profile.profile_picture = request.FILES['profile_thumnail']
             user.save()
             return redirect("authapp:index")
             

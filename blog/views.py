@@ -1,12 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpRequest
 from .forms import PostCreationForm
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 from django.views import View
 from django.db.models import Q 
 from django.contrib.auth.models import User 
 from django.contrib.auth.decorators import login_required
 from django.contrib.syndication.views import Feed 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response 
+
 # Create your views here.
 def index(request):
     posts = Post.objects.all().order_by("-created")
@@ -21,6 +24,16 @@ def create_post(request: HttpRequest):
             post:Post = form.save(commit=False)
             post.user = request.user 
             post.save()
+            tags = form.cleaned_data['tags']
+            tag_list = tags.split(' ')
+            for tag in tag_list:
+                print(tag)
+                tag = tag.strip()
+                tag_obj, created = Tag.objects.get_or_create(name=tag)
+                if created:
+                    tag_obj.save()
+                post.tags.add(tag_obj)
+            
             return redirect("blog:index")
     return render(request, "blog/newpost.html", {"form":form}) 
 
@@ -48,8 +61,9 @@ def update_post(request:HttpRequest, post_id:int):
 class SearchPost(View):
     def get(self, request):
         data = request.GET.get('q', '')
+        tag = get_object_or_404(Tag, name=data)
         posts = Post.objects.filter(Q(title__icontains=data)|Q(content__icontains=data)).order_by("-created")
-        
+
         return render(request, "blog/index.html", {"posts":posts})
 
 def detail(request, post_id):
@@ -57,7 +71,9 @@ def detail(request, post_id):
     user_has_commented = Comment.objects.filter(user=request.user, post=post).exists() if request.user.is_authenticated else True 
     user_has_liked = post.liked_by.filter(id=request.user.id).exists() if request.user.is_authenticated else True
     user_has_disliked = post.disliked_by.filter(id=request.user.id).exists() if request.user.is_authenticated else True
+    
     return render(request, "blog/detail.html", {"post":post, "user_has_commented":user_has_commented, "user_has_liked":user_has_liked, "user_has_disliked":user_has_disliked})
+
 
 @login_required(login_url="authapp:index")
 def add_comment(request, post_id):
@@ -87,8 +103,10 @@ def dislike_post(request, post_id):
 @login_required(login_url="authapp:index")
 def user_profile(request, user_id):
     user = User.objects.get(id=user_id)
-
-    return render(request, "blog/profile.html",{'user':user})
+    # avatar = get_thumbnailer(user.profile.profile_thumbnail).get_thumbnail({'size': (50, 50), 'crop': True})
+    posts = Post.objects.filter(user=user)
+    user_joined = user.date_joined.strftime('%B %Y')
+    return render(request, "blog/profile.html",{'user':user, 'posts':posts, 'date_joined':user_joined})
 
 class LatestPostsFeed(Feed):
     title = 'Latest Blog Posts'
@@ -106,3 +124,4 @@ class LatestPostsFeed(Feed):
     
     def item_link(self, item):
         return '/blog/post/{}'.format(item.id)
+

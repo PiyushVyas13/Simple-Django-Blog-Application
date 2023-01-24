@@ -1,7 +1,26 @@
 {% extends "blog/index.html" %}
+{% load thumbnail %}
 
 {% block content %}
 <h2>Your Profile </h2><hr>
-<span> profile of {{ user.username }} </span>
-<img src="{{ user.profile.profile_picture.url }}" alt="profile picture">
+<img src="{% thumbnail user.profile.profile_thumbnail 300x300 crop %}" alt="profile picture"><br>
+<span> Member since {{ date_joined }} </span><br>
+<h3>About</h3>
+<p>{{ user.profile.bio }} </p>
+<h3>Your Posts </h3>
+{% for post in posts %}
+    <div>
+        <h4><a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a></h4>
+        <span>By {{ post.user.username }} on {{ post.created }}</span>
+        <br>
+        <p>{{post.content}}</p>
+        <span>{{ post.liked_by.all.count }} likes</span>
+        {% if post.user == request.user %}
+        <span> <a href="{% url 'blog:update' post.id %}">Update </a> </span> &nbsp;
+        <span> <a href="{% url 'blog:delete' post.id %}" onclick="conf()" id="del">Delete </a> </span>
+        {% endif %}
+        <hr>
+    </div>
+{% endfor %}
+
 {% endblock content %}

@@ -5,3 +5,7 @@ blog/__pycache__/
 authsys/__pycache__/
 blog/migrations/
 authsys/migrations/
+api/migrations/
+api/__pycache__/
+auth_test/__pycache__/
+/.vscode
